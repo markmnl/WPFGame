@@ -8,6 +8,8 @@ namespace WpfGame
 {
     public partial class MainWindow : Window
     {
+        public const double UpdatesPerSecond = 60.0;
+
         private DispatcherTimer dispatcherTimer;
         private Stopwatch stopwatch;
         private long ticksAtLastUpdate;
@@ -19,7 +21,7 @@ namespace WpfGame
             Init();
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            dispatcherTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(32), DispatcherPriority.Normal, Update, Dispatcher);
+            dispatcherTimer = new DispatcherTimer(TimeSpan.FromSeconds(1.0 / UpdatesPerSecond), DispatcherPriority.Send, Update, Dispatcher);
             dispatcherTimer.Start();
         }
 
@@ -33,7 +35,7 @@ namespace WpfGame
         {
             float dt = (stopwatch.ElapsedTicks - ticksAtLastUpdate) / (float)Stopwatch.Frequency;
             ticksAtLastUpdate = stopwatch.ElapsedTicks;
-            text.Text = dt.ToString();
+            text.Text = (1.0f / dt).ToString("F4");
 
             var point = Mouse.GetPosition(canvas);
             dudeSprite.UpdatePosition(point);
